@@ -16,6 +16,6 @@ public class CategoryViewerActivity  extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.categoryviewer);
-        // test change
+        //
     }
   }
