@@ -1,0 +1,70 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context=".MainActivity"
+    android:theme="@style/AppTheme">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:id="@+id/linearLayout"
+        android:weightSum="0"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="false">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <ListView
+                android:layout_width="fill_parent"
+                android:layout_height="470dp"
+                android:id="@+id/listView"
+                android:layout_gravity="center_horizontal" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="bottom|center"
+            android:id="@+id/linearLayout"
+            android:baselineAligned="false"
+            android:theme="@style/AppTheme"
+            android:background="@drawable/layout_border">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:text="Add"
+                android:id="@+id/addButton"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:gravity="center"
+                android:textColor="#ff000000" />
+
+            <View
+                android:layout_width="2px"
+                android:layout_height="fill_parent"
+                android:background="#ff000000" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:text="Exit"
+                android:id="@+id/exitButton"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:textColor="#ff000000" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
