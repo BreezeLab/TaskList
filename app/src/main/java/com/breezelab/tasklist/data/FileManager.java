@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.ListAdapter;
 import android.widget.SimpleAdapter;
 
+import com.breezelab.tasklist.entity.CategoriesList;
 import com.breezelab.tasklist.entity.ListFile;
 import com.breezelab.tasklist.entity.ListItem;
 
@@ -25,14 +26,49 @@ import org.simpleframework.xml.core.Persister;
  * @author Breeze
  */
 public class FileManager {
-    private String directory = "";
+    boolean isInit = false;
+    private String filesDirectory = "files";
+    private String settingsDirectory = "conf";
+    private String categoriesFile = "categories.xml";
     private static String TAG = "ListFileManager";
     static FileManager instance = new FileManager();
     static Serializer serializer = new Persister();
     private List<ListFile> fileList = new ArrayList<ListFile>();
 
-    public void setDirectory(String newDir){
-        directory = newDir;
+    public FileManager(){
+
+    }
+
+    public void init(Context context){
+//        String packageName = context.getPackageName();
+        if(isInit) {
+            return;
+        }
+        isInit = true;
+        String path = context.getExternalFilesDir(null).toString();
+        path = path.substring(0,path.lastIndexOf("/"));
+        filesDirectory = path + "/" + filesDirectory;
+        settingsDirectory = path + "/" + settingsDirectory;
+
+        // Init settings
+        File catFile = new File(settingsDirectory + "/" + categoriesFile);
+        if(!catFile.exists()) {
+            CategoriesList catList = new CategoriesList();
+            catList.init();
+            writeCategoryList(catList);
+//            catFile.mkdirs();
+        }
+    }
+
+    public static FileManager getInstance(){
+        if(instance == null){
+            instance = new FileManager();
+        }
+        return instance;
+    }
+
+    public void setFilesDirectory(String newDir){
+        filesDirectory = newDir;
     }
 
     public ListItem createItem(int index, boolean checked, String text) {
@@ -42,7 +78,6 @@ public class FileManager {
         newItem.setText(text);
         return newItem;
     }
-
 
     private void getFilesFromDir(File path) {
         Log.d(TAG, "Reading dir " + path);
@@ -91,15 +126,19 @@ public class FileManager {
 
     public ListFile getListFileByName(String fileName){
         Log.d(TAG, "Getting list file by name");
-        return getListFile(directory + "/" + fileName + ".xml");
+        return getListFile(filesDirectory + "/" + fileName + ".xml");
     }
 
     public boolean writeListFile(String fileName, ListFile list){
-        Log.d(TAG, "Writing file " + directory + "/" + fileName);
+        Log.d(TAG, "Writing file " + filesDirectory + "/" + fileName);
         Log.d(TAG, list.toString());
         list.fixTimeOfChanges();
         try {
-            File result = new File(directory + "/" + fileName);
+            File path = new File(filesDirectory +"/");
+            if(!path.exists() && path.isDirectory()){
+                path.mkdirs();
+            }
+            File result = new File(filesDirectory + "/" + fileName);
             if (!result.exists()){
                 result.createNewFile();
             }
@@ -129,9 +168,9 @@ public class FileManager {
         return Collections.unmodifiableList(listItem);
     }
 
-    public ListAdapter createListAdapter(Context context) {
+    public ListAdapter createFileListAdapter(Context context) {
         fileList.clear();
-        getFilesFromDir(new File(directory));
+        getFilesFromDir(new File(filesDirectory+"/"));
 
         final String[] fromMapKey = new String[] {"Name", "Date"};
         final int[] toLayoutId = new int[] {android.R.id.text1, android.R.id.text2};
@@ -142,12 +181,45 @@ public class FileManager {
                 fromMapKey, toLayoutId);
     }
 
-    public static FileManager getInstance(){
-        if(instance == null){
-            instance = new FileManager();
+    public List<String> readCategoryList(){
+        String filePath = settingsDirectory + "/" + categoriesFile;
+        Log.d(TAG, "Convert xml file " + filePath);
+        try {
+            File source = new File(filePath);
+            CategoriesList categories = serializer.read(CategoriesList.class, source);
+            Log.d(TAG, "Convert success");
+            return categories.getList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "Convert failed");
+            return null;
         }
-        return instance;
     }
+
+    public boolean writeCategoryList(CategoriesList catList){
+        String filepath = settingsDirectory + "/" + categoriesFile;
+        Log.d(TAG, "Writing category file " + filepath);
+        Log.d(TAG, catList.toString());
+        try {
+            File path = new File(settingsDirectory +"/");
+            Log.d(TAG, "Check settings directory(" + settingsDirectory + "/) Exist: " + path.exists());
+            if(!path.exists()){
+                Log.d(TAG, "Making dirs");
+                path.mkdirs();
+            }
+            File result = new File(filepath);
+            if (!result.exists()){
+                result.createNewFile();
+            }
+            serializer.write(catList, result);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
 
 //        ListFileXML xmlList = new listfilexml.ListFileXML();
 //        xmlList.setTitle("Meals");
