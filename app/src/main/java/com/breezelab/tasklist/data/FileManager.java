@@ -40,7 +40,6 @@ public class FileManager {
     }
 
     public void init(Context context){
-//        String packageName = context.getPackageName();
         if(isInit) {
             return;
         }
@@ -56,7 +55,6 @@ public class FileManager {
             CategoriesList catList = new CategoriesList();
             catList.init();
             writeCategoryList(catList);
-//            catFile.mkdirs();
         }
     }
 
