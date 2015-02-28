@@ -22,6 +22,18 @@
             android:screenOrientation="portrait"
             android:parentActivityName=".activities.FileViewerActivity"
             android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".activities.CategoryViewerActivity"
+            android:label="@string/category_activity_name"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activities.FileViewerActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".activities.SettingsViewerActivity"
+            android:label="@string/settings_activity_name"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activities.FileViewerActivity"
+            android:windowSoftInputMode="adjustPan"/>
     </application>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 

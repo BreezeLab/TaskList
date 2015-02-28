@@ -195,10 +195,10 @@ public class ListViewerActivity extends Activity {
                     Log.d(TAG, "IsMarking else" + isMarkingMode + "");
                     isMarkingMode = false;
                     LinearLayout linearLayout = (LinearLayout)findViewById(R.id.listFileViewer);
-                    linearLayout.setBackgroundResource(R.drawable.editing_background);
+//                    linearLayout.setBackgroundResource(R.drawable.editing_background);
 
                     LinearLayout bottomBarLayout = (LinearLayout)findViewById(R.id.bottomBar);
-                    bottomBarLayout.setBackgroundResource(R.drawable.editing_background);
+//                    bottomBarLayout.setBackgroundResource(R.drawable.editing_background);
 
                     Iterator it = editIdList.iterator();
                     while(it.hasNext()){

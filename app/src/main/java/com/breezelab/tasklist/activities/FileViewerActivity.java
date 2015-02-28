@@ -33,16 +33,11 @@ public class FileViewerActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        lfManager.init(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        String packageName = getApplicationContext().getPackageName();
-        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                + "/" + packageName;
-        lfManager.setDirectory(path);
-
-        ListAdapter adapter = lfManager.createListAdapter(this);
+        ListAdapter adapter = lfManager.createFileListAdapter(this);
         mainList = (ListView) findViewById(R.id.listView);
         mainList.setAdapter(adapter);
         mainList.setSelection(0);
@@ -120,7 +115,7 @@ public class FileViewerActivity extends Activity {
     }
 
     private void refreshList(){
-//        mainList.setAdapter(lfManager.createListAdapter(getApplicationContext()));
+        mainList.setAdapter(lfManager.createFileListAdapter(this));
     }
 
     private void getList(){
@@ -135,6 +130,7 @@ public class FileViewerActivity extends Activity {
         return true;
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -144,7 +140,8 @@ public class FileViewerActivity extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Intent intent = new Intent(FileViewerActivity.this, SettingsViewerActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
